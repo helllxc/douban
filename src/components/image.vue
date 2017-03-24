@@ -1,109 +1,18 @@
 <template>
-  <content @scroll="loadMore()">
-      <toast></toast>
-      <share></share>
-      <div class="wrapper" >
-        <ul id="detaillist" v-for="(list,$index) in detaillist">
-          <li class="de_list" :id="list.group.id">
-            <a :href="'#/detail/'+list.group.id" >
-              <div class="header"><a href=""><img :src="list.group.user.avatar_url" alt="" class="avatar left"></a><span class="author_name">{{list.group.user.name}}</span></div>
-              <div class="content">
-                <div class="text">
-                  <a :href="'#/detail/'+list.group.id"><p>{{list.group.content}}</p></a>
-                </div>
-                <div class="link">
-                  <div class="link_to"><a href="">{{list.group.category_name}}</a></div>
-                </div>
-                <div class="img-wrapper-outer">
-                  <div class="img-wrapper">
-                    <a href="javascript:;" :class="{'stable':list.group.large_image.height>708}"><img :src="list.group.large_image.url_list[0].url" alt="" class="upload_img"></a>
-                    <div class="long-img" :class="{'large_image':list.group.large_image.height>708}"><span>点击查看长图</span></div>
-                  </div>
-                </div>
-              </div>
-              <div class="foot">
-                <ul>
-                  <li><a href="javascript:;" @click="showtoast(list,1,$index)"><span class="favourite">{{list.group.digg_count}}</span></a></li>
-                  <li><a href="javascript:;" @click="showtoast(list,2,$index)"><span class="burry">{{list.group.bury_count}}</span></a></li>
-                  <li><a :href="'#/detail/'+list.group.id"><span class="comment" :class="{'hot':list.group.status_desc=='热门投稿'}">{{list.group.comment_count}}</span></a></li>
-                  <li><a href="javascript:;" @click="isShare"><span class="share">{{list.group.share_count}}</span></a></li>
-                </ul>
-              </div>
-            </a>
-          </li>
-        </ul>
-      </div>
-  </content>
+  <xcontent :a="str" :b="str1"></xcontent>
 </template>
 
 <script>
-  import toast from './toast.vue';
-  import share from './share.vue'
+  import xcontent from './content.vue'
 export default {
-  props:['a','b'],
-  data(){
+  data:function(){
       return{
-        detaillist:[],
-        num:0,
-        top:0,
-        clicked:'',
+        str:"http://m.neihanshequ.com/pic/?is_json=",
+        str1:"&app_name=neihanshequ_web&max_time=1490336265&csrfmiddlewaretoken=02bb2b4730c97c895db0b351c39c334e"
       }
   },
-  methods:{
-    getinfo() {
-      this.$store.commit('setLoading',true)
-      this.num++;
-      this.$http.jsonp(this.a+this.num+this.b ).
-      then(function (data) {
-        this.detaillist = this.detaillist.concat(data.data.data.data);
-        this.$store.commit('setLoading',false)
-        console.log(this.detaillist)
-      })
-    },
-    loadMore(){
-        console.log(this);
-        if(this.$el.scrollTop+this.$el.offsetHeight>=this.$el.scrollHeight-10){
-           this.getinfo();
-        }
-        if(this.$el.scrollTop>this.top){
-          this.$store.commit('setShown',false)
-        }else{
-          this.$store.commit('setShown',true)
-        }
-      this.top = this.$el.scrollTop
-    },
-    showtoast:function (obj,num,idx) {
-        if(!obj.group.is_anonymous){
-            this.$store.commit('setComment','操作成功')
-          if(num==1){
-            obj.group.digg_count+=1;
-            this.clicked = '顶';
-            $('.favourite').eq(idx).addClass('ed');
-          }else{
-            obj.group.bury_count+=1;
-            this.clicked = '踩';
-            $('.burry').eq(idx).addClass('ec');
-          }
-          obj.group.is_anonymous = true;
-        }else{
-          this.$store.commit('setComment','你已'+this.clicked+'过')
-        }
-      this.$store.commit('setToast',true);
-      var self = this;
-      setTimeout(function(){
-        self.$store.commit('setToast',false);
-      },1000);
-    },
-    isShare:function () {
-      this.$store.commit('setShare',true)
-    }
-  },
-  mounted(){
-    this.getinfo();
-  },
   components:{
-    toast,
-    share
+      xcontent
   }
 }
 </script>
@@ -182,8 +91,6 @@ export default {
                   .comment{background-image: url('../assets/commond.png');background-position: left center;}
                   .share{background-image: url('../assets/share.png');background-position: left center;}
                   .hot{background-image: url('../assets/hot.png');background-position: left center;}
-                  .ed{background-image: url('../assets/ding.png');color: #ff819f;}
-                  .ec{background-image: url('../assets/cai.png');color: #ff819f;}
                 }
               }
             }

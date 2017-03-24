@@ -1,17 +1,22 @@
 <template>
   <div>
     <xheader></xheader>
-    <xcontent></xcontent>
+    <loading></loading>
+    <router-view></router-view>
+    <!--<xcontent></xcontent>-->
   </div>
 </template>
 
 <script>
   import xheader from '../xhead.vue';
-  import xcontent from '../content.vue';
+//  import xcontent from '../content.vue';
+  import loading from '../loading.vue'
 export default {
+
   components:{
     xheader,
-    xcontent,
+    loading,
+//    xcontent,
   }
 }
 </script>

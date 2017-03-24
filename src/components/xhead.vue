@@ -1,10 +1,10 @@
 <template>
-  <nav class="slide">
+  <nav class="slide" v-if="show">
     <ul id="navbar">
-      <li class="acitve"><a href="">段子</a></li>
-      <li><a href="">图片</a></li>
+      <li class="acitve"><a href="#/text">段子</a></li>
+      <li><a href="#/image">图片</a></li>
       <li><a href="">视频</a></li>
-      <li><a href="">发现</a></li>
+      <li><a href="#/discovery">发现</a></li>
       <li><a href="">我的</a></li>
     </ul>
   </nav>
@@ -12,7 +12,14 @@
 
 <script>
 export default {
-
+    computed:{
+      show(){
+          return this.$store.state.show;
+      }
+    },
+  methods:function () {
+    
+  }
 }
 </script>
 
